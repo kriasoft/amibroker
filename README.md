@@ -1,7 +1,7 @@
 # AmiBroker .NET SDK
 
 This is yet another [AmiBroker](http://www.amibroker.com) plug-in SDK for .NET developers. As opposed to the official
-C++ based [AmiBroker Development Kit](http://www.amibroker.com/download.html) (ADK) it can be used for data, AFL and
+C++ based [AmiBroker Development Kit](http://www.amibroker.com/download.html) (ADK) it can be used for data and/or
 optimization plug-in authoring with .NET 4.5 / C#.
 
 It is 100% free, no hidden charges, allowed for both personal and commercial use under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
@@ -15,6 +15,11 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
  - [NuGet Package Manager](http://www.nuget.org) Visual Studio extension
  - [StyleCop](http://stylecop.codeplex.com/) (optional) for code style checking
  - Microsoft .NET Framework 4.5
+
+### To Do
+
+ - [Yahoo Finance](http://finance.yahoo.com) real-time data plug-in for AmiBroker
+ - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker
 
 ### Demo
 
