@@ -6,7 +6,7 @@ optimization plug-in authoring with .NET 4.5 / C#.
 
 It is 100% free, no hidden charges, allowed for both personal and commercial use under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-Contributions of any kind are welcomed! Feel free to [fork](https://github.com/kriasoft/amibroker/fork_select)
+Contributions of any kind are welcome! Feel free to [fork](https://github.com/kriasoft/amibroker/fork_select)
 this repo and send [pull requests](https://help.github.com/articles/using-pull-requests) with your updates.
 
 ### Prerequisites
