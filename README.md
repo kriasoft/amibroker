@@ -16,10 +16,10 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
  - [StyleCop](http://stylecop.codeplex.com/) (optional) for code style checking
  - Microsoft .NET Framework 4.5
 
-### To Do
+### Community Plug-ins
 
- - [Yahoo Finance](http://finance.yahoo.com) real-time data plug-in for AmiBroker
- - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker
+ - [Yahoo Finance](http://finance.yahoo.com) real-time data plug-in for AmiBroker (planned)
+ - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker (planned)
 
 ### Demo
 
