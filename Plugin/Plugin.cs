@@ -38,11 +38,11 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void GetPluginInfo(ref PluginInfo pluginInfo)
         {
-            pluginInfo.Name = "AmiBroker\x00ae data Plug-in";
+            pluginInfo.Name = "Finam\x00ae data Plug-in";
             pluginInfo.Vendor = "KriaSoft LLC";
             pluginInfo.Type = PluginType.Data;
             pluginInfo.Version = 10000; // v1.0.0
-            pluginInfo.IDCode = PackIDCode("TEST");
+            pluginInfo.IDCode = PackIDCode("FINM");
             pluginInfo.Certificate = 0;
             pluginInfo.MinAmiVersion = 5600000; // v5.60
             pluginInfo.StructSize = Marshal.SizeOf((PluginInfo)pluginInfo);
