@@ -1,6 +1,13 @@
 <StyleCopSettings Version="105">
   <Analyzers>
     <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
+      <Rules>
+        <Rule Name="ElementsMustBeDocumented">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
       <AnalyzerSettings>
         <StringProperty Name="CompanyName">KriaSoft LLC</StringProperty>
         <StringProperty Name="Copyright">Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt</StringProperty>

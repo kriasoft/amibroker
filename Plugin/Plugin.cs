@@ -8,6 +8,7 @@ namespace AmiBroker.Plugin
 {
     using System;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Text;
@@ -42,7 +43,7 @@ namespace AmiBroker.Plugin
             pluginInfo.Vendor = "KriaSoft LLC";
             pluginInfo.Type = PluginType.Data;
             pluginInfo.Version = 10000; // v1.0.0
-            pluginInfo.IDCode = PackIDCode("TEST");
+            pluginInfo.IDCode = new PluginID("TEST");
             pluginInfo.Certificate = 0;
             pluginInfo.MinAmiVersion = 5600000; // v5.60
             pluginInfo.StructSize = Marshal.SizeOf((PluginInfo)pluginInfo);
@@ -51,7 +52,6 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void Init()
         {
-            System.Threading.Thread.Sleep(5000);
         }
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
@@ -71,9 +71,11 @@ namespace AmiBroker.Plugin
         {
             // TODO: Add logic here. Take a look at the demo below:
 
+            Debug.WriteLine("GetQuotesEx(ticker: " + ticker + ", periodicity: " + periodicity + ", lastValid: " + lastValid + ", size: " + size + ", ...)");
+
             /*for (var i = 0; i < 5; i++)
             {
-                quotes[i].DateTime = PackDate(DateTime.Today.AddDays(i - 5));
+                quotes[i].DateTime = new AmiDate(DateTime.Now.AddDays(i - 5));
                 quotes[i].Price = 10;
                 quotes[i].Open = 15;
                 quotes[i].High = 16;
@@ -83,6 +85,7 @@ namespace AmiBroker.Plugin
                 quotes[i].AuxData1 = 0;
                 quotes[i].AuxData2 = 0;
             }
+
             return 5;*/
 
             // return 'lastValid + 1' if no updates are found and you want to keep all existing records
@@ -136,19 +139,6 @@ namespace AmiBroker.Plugin
         #region Helper Functions
 
         /// <summary>
-        /// Converts string code into Int32 required by AmiBroker. Used to define a unique ID for the plug-in.
-        /// </summary>
-        private static int PackIDCode(string id)
-        {
-            if (id.Length != 4)
-            {
-                throw new ArgumentException("Plugin ID must be 4 characters long.", "id");
-            }
-
-            return id[0] << 24 | id[1] << 16 | id[2] << 8 | id[3] << 0;
-        }
-
-        /// <summary>
         /// Sends the specified message to a window or windows. It calls the window procedure for the specified window and does not return until the window procedure has processed the message.
         /// </summary>
         [DllImport("User32.dll", CharSet = CharSet.Auto)]
@@ -160,78 +150,6 @@ namespace AmiBroker.Plugin
         static void NotifyStreamingUpdate()
         {
             SendMessage(MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
-        }
-
-        /// <summary>
-        /// Pack AmiBroker DateTime object into UInt64
-        /// </summary>
-        static ulong PackDate(DateTime date, bool isFuturePad = false)
-        {
-            var isEOD = date.Hour == 0 && date.Minute == 0 && date.Second == 0;
-
-            // lower 32 bits
-            var ft = BitVector32.CreateSection(1);
-            var rs = BitVector32.CreateSection(23, ft);
-            var ms = BitVector32.CreateSection(999, rs);
-            var ml = BitVector32.CreateSection(999, ms);
-            var sc = BitVector32.CreateSection(59, ml);
-
-            var bv1 = new BitVector32(0);
-            bv1[ft] = isFuturePad ? 1 : 0;         // bit marking "future data"
-            bv1[rs] = 0;                            // reserved set to zero
-            bv1[ms] = 0;                            // microseconds 0..999
-            bv1[ml] = date.Millisecond;             // milliseconds 0..999
-            bv1[sc] = date.Second;                  // 0..59
-
-            // higher 32 bits
-            var mi = BitVector32.CreateSection(59);
-            var hr = BitVector32.CreateSection(23, mi);
-            var dy = BitVector32.CreateSection(31, hr);
-            var mn = BitVector32.CreateSection(12, dy);
-            var yr = BitVector32.CreateSection(4095, mn);
-
-            var bv2 = new BitVector32(0);
-            bv2[mi] = isEOD ? 63 : date.Minute;     // 0..59        63 is reserved as EOD marker
-            bv2[hr] = isEOD ? 31 : date.Hour;       // 0..23        31 is reserved as EOD marker
-            bv2[dy] = date.Day;                     // 1..31
-            bv2[mn] = date.Month;                   // 1..12
-            bv2[yr] = date.Year;                    // 0..4095
-
-            return ((ulong)bv2.Data << 32) ^ (ulong)bv1.Data;
-        }
-
-        /// <summary>
-        /// Unpack UInt64 object into AmiBroker DateTime
-        /// </summary>
-        static DateTime UnpackDate(ulong date)
-        {
-            // lower 32 bits
-            var ft = BitVector32.CreateSection(1);
-            var rs = BitVector32.CreateSection(23, ft);
-            var ms = BitVector32.CreateSection(999, rs);
-            var ml = BitVector32.CreateSection(999, ms);
-            var sc = BitVector32.CreateSection(59, ml);
-            var bv1 = new BitVector32((int)(date << 32 >> 32));
-
-            // higher 32 bits
-            var mi = BitVector32.CreateSection(59);
-            var hr = BitVector32.CreateSection(23, mi);
-            var dy = BitVector32.CreateSection(31, hr);
-            var mn = BitVector32.CreateSection(12, dy);
-            var yr = BitVector32.CreateSection(4095, mn);
-            var bv2 = new BitVector32((int)(date >> 32));
-
-            var hour = bv2[hr];
-            var minute = bv2[mi];
-            var second = bv1[sc];
-            var milsec = bv1[ml];
-
-            if (hour > 24 || minute > 59 || second > 59 || milsec > 999)
-            {
-                return new DateTime(bv2[yr], bv2[mn], bv2[dy]);
-            }
-
-            return new DateTime(bv2[yr], bv2[mn], bv2[dy], hour, minute, second, milsec);
         }
 
         /// <summary>
