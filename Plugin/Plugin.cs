@@ -10,6 +10,7 @@ namespace AmiBroker.Plugin
     using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Net.Http;
     using System.Runtime.InteropServices;
     using System.Text;
 
