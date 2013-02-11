@@ -60,6 +60,11 @@ namespace AmiBroker.Plugin
         {
         }
 
+        [DllExport(CallingConvention = CallingConvention.Cdecl)]
+        public static void Notify(PluginNotification notification)
+        {
+        }
+
         /// <summary>
         /// GetQuotesEx function is functional equivalent fo GetQuotes but
         /// handles new Quotation format with 64 bit date/time stamp and floating point volume/open int

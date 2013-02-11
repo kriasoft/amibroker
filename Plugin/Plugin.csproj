@@ -58,9 +58,11 @@
     <Compile Include="Models\Periodicity.cs" />
     <Compile Include="Models\PluginID.cs" />
     <Compile Include="Models\PluginInfo.cs" />
+    <Compile Include="Models\PluginNotification.cs" />
     <Compile Include="Models\PluginStatus.cs" />
     <Compile Include="Models\PluginType.cs" />
     <Compile Include="Models\Quotation.cs" />
+    <Compile Include="Models\Workspace.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
