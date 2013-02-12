@@ -1,4 +1,4 @@
-# AmiBroker .NET SDK
+# AmiBroker .NET SDK and Community Plug-ins
 
 This is yet another [AmiBroker](http://www.amibroker.com) plug-in SDK for .NET developers. As opposed to the official
 C++ based [AmiBroker Development Kit](http://www.amibroker.com/download.html) (ADK) it can be used for data and/or

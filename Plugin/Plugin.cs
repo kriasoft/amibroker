@@ -24,11 +24,6 @@ namespace AmiBroker.Plugin
     public class Plugin
     {
         /// <summary>
-        /// A pointer to AmiBroker main window
-        /// </summary>
-        static IntPtr MainWnd = IntPtr.Zero;
-
-        /// <summary>
         /// Plugin status code
         /// </summary>
         static StatusCode Status = StatusCode.OK;
@@ -174,7 +169,7 @@ namespace AmiBroker.Plugin
         /// </summary>
         static void NotifyStreamingUpdate()
         {
-            NativeMethods.SendMessage(MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
+            NativeMethods.SendMessage(DataSource.MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>

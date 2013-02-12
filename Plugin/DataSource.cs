@@ -19,8 +19,14 @@ namespace AmiBroker.Plugin
 
         public string DatabasePath { get; set; }
 
+        /// <summary>
+        /// Gets the pointer to AmiBroker's main window.
+        /// </summary>
         public IntPtr MainWnd { get; private set; }
 
+        /// <summary>
+        /// Gets AmiBroker's OLE automation object.
+        /// </summary>
         public dynamic Broker { get; private set; }
     }
 }
