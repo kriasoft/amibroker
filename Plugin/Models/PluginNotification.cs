@@ -31,11 +31,11 @@ namespace AmiBroker.Plugin.Models
 
         public PluginNotificationReason Reason; // int
 
-        public IntPtr DatabasePath;             // LPCTSTR
+        internal IntPtr DatabasePath;             // LPCTSTR
 
-        public IntPtr MainWnd;                  // HWND
+        internal IntPtr MainWnd;                  // HWND
 
-        public IntPtr StockInfoFormat4;         // struct StockInfoFormat4*
+        internal IntPtr StockInfoFormat4;         // struct StockInfoFormat4*
 
         public unsafe Workspace* Workspace;     // struct _Workspace*
 

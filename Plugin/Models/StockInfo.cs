@@ -14,32 +14,32 @@ namespace AmiBroker.Plugin.Models
     {
         // Offset 0
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 48)]
-        public IntPtr ShortName;
+        internal IntPtr ShortName;
 
         // Offset 48
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 48)]
-        public IntPtr AliasName;
+        internal IntPtr AliasName;
 
         // Offset 96
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 48)]
-        public IntPtr WebID;
+        internal IntPtr WebID;
 
         // Offset 144
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-        public IntPtr FullName;
+        internal IntPtr FullName;
 
         // Offset 272
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-        public IntPtr Address;
+        internal IntPtr Address;
 
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public IntPtr Country; // Offset 400
+        internal IntPtr Country; // Offset 400
 
         /// <summary>
         /// ISO 3 letter currency code
         /// </summary>
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public IntPtr Currency; // Offset 464
+        internal IntPtr Currency; // Offset 464
 
         /// <summary>
         /// The ID of the data plug-in, 0 - accept workspace settings
