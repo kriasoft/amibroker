@@ -40,7 +40,7 @@ namespace AmiBroker.Plugin
 
         static string DatabasePath = null;
 
-        static PluginControl Control = new PluginControl();
+        static PluginControl Control;
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void GetPluginInfo(ref PluginInfo pluginInfo)
@@ -68,11 +68,18 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static unsafe void Notify(PluginNotification* notification)
         {
-            DatabasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
-
-            if (notification->Reason == PluginNotificationReason.StatusRightClick)
+            switch (notification->Reason)
             {
-                Control.ContextMenu.IsOpen = true;
+                case PluginNotificationReason.DatabaseLoaded:
+                    DatabasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
+                    Control = new PluginControl(DatabasePath);
+                    break;
+                case PluginNotificationReason.DatabaseUnloaded:
+                    DatabasePath = null;
+                    break;
+                case PluginNotificationReason.StatusRightClick:
+                    Control.ContextMenu.IsOpen = true;
+                    break;
             }
         }
 
