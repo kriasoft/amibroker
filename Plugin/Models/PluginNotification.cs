@@ -39,6 +39,6 @@ namespace AmiBroker.Plugin.Models
 
         public unsafe Workspace* Workspace;     // struct _Workspace*
 
-        public IntPtr StockInfo;                // struct StockInfo*
+        public unsafe StockInfo* StockInfo;     // struct StockInfo*
     }
 }

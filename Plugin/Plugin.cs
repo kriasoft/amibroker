@@ -16,6 +16,7 @@ namespace AmiBroker.Plugin
 
     using Models;
     using RGiesecke.DllExport;
+    using System.Windows.Controls;
 
     /// <summary>
     /// Standard implementation of a typical AmiBroker plug-ins.
@@ -36,6 +37,10 @@ namespace AmiBroker.Plugin
         /// Default encoding
         /// </summary>
         static Encoding encoding = Encoding.GetEncoding("windows-1251"); // TODO: Update it based on your preferences
+
+        static string DatabasePath = null;
+
+        static PluginControl Control = new PluginControl();
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void GetPluginInfo(ref PluginInfo pluginInfo)
@@ -63,7 +68,12 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static unsafe void Notify(PluginNotification* notification)
         {
-            var databasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
+            DatabasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
+
+            if (notification->Reason == PluginNotificationReason.StatusRightClick)
+            {
+                Control.ContextMenu.IsOpen = true;
+            }
         }
 
         /// <summary>
