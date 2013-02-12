@@ -1,0 +1,42 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PluginControl.xaml.cs" company="KriaSoft LLC">
+//   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace AmiBroker.Plugin
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using System.Windows.Navigation;
+    using System.Windows.Shapes;
+
+    /// <summary>
+    /// Interaction logic for PluginControl user control.
+    /// </summary>
+    public partial class PluginControl : UserControl
+    {
+        public PluginControl()
+        {
+            this.InitializeComponent();
+        }
+
+        private void OnAboutClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+                "This is a demo plug-in built with AmiBroker .NET SDK. For more info visit: http://github.com/kriasoft/amibroker",
+                "AmiBroker® Demo Plug-in",
+                MessageBoxButton.OK);
+        }
+    }
+}

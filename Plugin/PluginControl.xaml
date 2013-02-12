@@ -1,0 +1,10 @@
+﻿<UserControl x:Class="AmiBroker.Plugin.PluginControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="About this plug-in" Click="OnAboutClick" />
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    
+</UserControl>
