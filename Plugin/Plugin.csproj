@@ -55,6 +55,7 @@
     <Compile Include="Models\AmiVar.cs" />
     <Compile Include="Models\ColorRef.cs" />
     <Compile Include="Models\GQEContext.cs" />
+    <Compile Include="Models\IntradaySettings.cs" />
     <Compile Include="Models\Periodicity.cs" />
     <Compile Include="Models\PluginID.cs" />
     <Compile Include="Models\PluginInfo.cs" />

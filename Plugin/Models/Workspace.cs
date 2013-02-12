@@ -9,25 +9,50 @@ namespace AmiBroker.Plugin.Models
     using System;
     using System.Runtime.InteropServices;
 
-    [StructLayoutAttribute(LayoutKind.Sequential)]
-    public class Workspace
+    public enum DataSourceType
     {
         /// <summary>
-        /// 0 - use preferences, 1 - local, ID of plugin
+        /// Use data source type from preferences
         /// </summary>
-        public int DataSource;
+        Default,
 
         /// <summary>
-        /// 0 - use preferences, 1 - store locally, 2 - don't
+        /// Local data source, plugin ID
         /// </summary>
-        public int DataLocalMode;
+        LocalSource
+    }
+
+    public enum DataSourceMode
+    {
+        /// <summary>
+        /// Use data storage mode from preferences
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// Store data locally
+        /// </summary>
+        LocalStorage,
+
+        /// <summary>
+        /// No local data storage
+        /// </summary>
+        NoLocalStorage
+    }
+
+    [StructLayoutAttribute(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct Workspace
+    {
+        public DataSourceType DataSourceType;
+
+        public DataSourceMode DataSourceMode;
 
         public int NumBars;
 
         public int TimeBase;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public int[] reservedB;
+        public unsafe fixed int ReservedB[8];
 
         public int AllowMixedEODIntra;
 
@@ -37,7 +62,7 @@ namespace AmiBroker.Plugin.Models
 
         public int ReservedC;
 
-        public IntPtr IntradaySettings;
+        public IntradaySettings IntradaySettings;
 
         public int ReservedD;
     }

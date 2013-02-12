@@ -61,8 +61,9 @@ namespace AmiBroker.Plugin
         }
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
-        public static void Notify(PluginNotification notification)
+        public static unsafe void Notify(PluginNotification* notification)
         {
+            var databasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
         }
 
         /// <summary>

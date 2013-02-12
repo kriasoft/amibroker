@@ -25,20 +25,20 @@ namespace AmiBroker.Plugin.Models
     /// choices to the user like "Connect", "Disconnect", etc.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public class PluginNotification
+    public struct PluginNotification
     {
-        public int StructSize { get; set; }                     // int
+        public int StructSize;                  // int
 
-        public PluginNotificationReason Reason { get; set; }    // int
+        public PluginNotificationReason Reason; // int
 
-        public string DatabasePath { get; set; }                // LPCTSTR
+        public IntPtr DatabasePath;             // LPCTSTR
 
-        public IntPtr MainWnd { get; set; }                     // HWND
+        public IntPtr MainWnd;                  // HWND
 
-        public IntPtr StockInfoFormat4 { get; set; }            // struct StockInfoFormat4*
+        public IntPtr StockInfoFormat4;         // struct StockInfoFormat4*
 
-        public IntPtr Workspace { get; set; }                   // struct _Workspace*
+        public unsafe Workspace* Workspace;     // struct _Workspace*
 
-        public IntPtr StockInfo { get; set; }                   // struct StockInfo*
+        public IntPtr StockInfo;                // struct StockInfo*
     }
 }
