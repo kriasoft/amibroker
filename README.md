@@ -9,7 +9,7 @@ It is 100% free, no hidden charges, allowed for both personal and commercial use
 Contributions of any kind are welcome! Feel free to [fork](https://github.com/kriasoft/amibroker/fork_select)
 this repo and send [pull requests](https://help.github.com/articles/using-pull-requests) with your updates.
 
-### Prerequisites
+### Prerequisites for Developers
 
  - [Visual Studio 2012](http://www.visualstudio.com) (preferred) or Visual Studio 2010
  - [NuGet Package Manager](http://www.nuget.org) Visual Studio extension
@@ -27,7 +27,11 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 
 ### Getting Started
 
-Open 'AmiBroker .NET SDK.sln' solution file in Visual Studio, update plugin information inside
+Download and install [GitHub for Windows](http://windows.github.com/) if you havn't done it already. Click
+[[Clone in Windows](github-windows://openRepo/https://github.com/kriasoft/amibroker)] button at the top of this page
+in order to download the latest version of this project to your local folder.
+
+Open 'AmiBroker .NET SDK.sln' solution file in Visual Studio, update information about your plug-in inside
 `Plugin/Plugin.cs/GetPluginInfo()` method, add quotes related logic inside `Plugin/Plugin.cs/GetQuotesEx()` method,
 build the project, copy "Plugin.dll" to the AmiBroker's Plugins folder or alternatively you can add a
 [symbolic link](http://en.wikipedia.org/wiki/NTFS_symbolic_link) with the following command:
