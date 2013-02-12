@@ -6,5 +6,4 @@
             <MenuItem Header="Update symbol list" Click="UpdateSymbolList_Click" />
         </ContextMenu>
     </UserControl.ContextMenu>
-    
 </UserControl>

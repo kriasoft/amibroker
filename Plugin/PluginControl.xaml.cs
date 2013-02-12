@@ -24,19 +24,13 @@ namespace AmiBroker.Plugin
     /// </summary>
     public partial class PluginControl : UserControl
     {
-        private readonly string databasePath;
-
-        internal struct market
+        public PluginControl(DataSource dataSource)
         {
-            public int value;
-            public string title;
-        }
-
-        public PluginControl(string databasePath)
-        {
-            this.databasePath = databasePath;
+            this.dataSource = dataSource;
             this.InitializeComponent();
         }
+
+        private readonly DataSource dataSource;
 
         private async void UpdateSymbolList_Click(object sender, RoutedEventArgs e)
         {
