@@ -24,11 +24,6 @@ namespace AmiBroker.Plugin
     public class Plugin
     {
         /// <summary>
-        /// A pointer to AmiBroker main window
-        /// </summary>
-        static IntPtr MainWnd = IntPtr.Zero;
-
-        /// <summary>
         /// Plugin status code
         /// </summary>
         static StatusCode Status = StatusCode.OK;
@@ -170,17 +165,11 @@ namespace AmiBroker.Plugin
         #region Helper Functions
 
         /// <summary>
-        /// Sends the specified message to a window or windows. It calls the window procedure for the specified window and does not return until the window procedure has processed the message.
-        /// </summary>
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
-        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        /// <summary>
         /// Notify AmiBroker that new streaming data arrived
         /// </summary>
         static void NotifyStreamingUpdate()
         {
-            SendMessage(MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
+            NativeMethods.SendMessage(DataSource.MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
         }
 
         /// <summary>

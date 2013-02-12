@@ -69,6 +69,7 @@
     <Compile Include="Models\Quotation.cs" />
     <Compile Include="Models\StockInfo.cs" />
     <Compile Include="Models\Workspace.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginControl.xaml.cs">
