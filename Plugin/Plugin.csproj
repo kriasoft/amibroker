@@ -54,6 +54,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSource.cs" />
     <Compile Include="Models\AmiDate.cs" />
     <Compile Include="Models\AmiVar.cs" />
     <Compile Include="Models\ColorRef.cs" />

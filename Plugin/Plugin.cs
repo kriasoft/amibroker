@@ -38,9 +38,12 @@ namespace AmiBroker.Plugin
         /// </summary>
         static Encoding encoding = Encoding.GetEncoding("windows-1251"); // TODO: Update it based on your preferences
 
-        static string DatabasePath = null;
+        static DataSource DataSource;
 
-        static PluginControl Control = new PluginControl();
+        /// <summary>
+        /// WPF user control which is used to display right-click context menu.
+        /// </summary>
+        static PluginControl Control;
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void GetPluginInfo(ref PluginInfo pluginInfo)
@@ -68,11 +71,22 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static unsafe void Notify(PluginNotification* notification)
         {
-            DatabasePath = Marshal.PtrToStringAnsi(notification->DatabasePath);
-
-            if (notification->Reason == PluginNotificationReason.StatusRightClick)
+            switch (notification->Reason)
             {
-                Control.ContextMenu.IsOpen = true;
+                case PluginNotificationReason.DatabaseLoaded:
+                    DataSource = new DataSource(
+                        databasePath: Marshal.PtrToStringAnsi(notification->DatabasePath),
+                        mainWnd: notification->MainWnd);
+                    Control = new PluginControl(DataSource);
+                    break;
+                case PluginNotificationReason.DatabaseUnloaded:
+                    DataSource.DatabasePath = null;
+                    break;
+                case PluginNotificationReason.StatusRightClick:
+                    Control.ContextMenu.IsOpen = true;
+                    break;
+                case PluginNotificationReason.SettingsChange:
+                    break;
             }
         }
 
@@ -206,32 +220,32 @@ namespace AmiBroker.Plugin
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         delegate int GetStockQtyDelegate();
 
-        static GetStockQtyDelegate GetStockQty;
+        private static GetStockQtyDelegate GetStockQty;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         delegate int SetCategoryNameDelegate(int category, int item, string name);
 
-        static SetCategoryNameDelegate SetCategoryName;
+        private static SetCategoryNameDelegate SetCategoryName;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         delegate string GetCategoryNameDelegate(int category, int item);
 
-        static GetCategoryNameDelegate GetCategoryName;
+        private static GetCategoryNameDelegate GetCategoryName;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         delegate int SetIndustrySectorDelegate(int industry, int sector);
 
-        static SetIndustrySectorDelegate SetIndustrySector;
+        private static SetIndustrySectorDelegate SetIndustrySector;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         delegate int GetIndustrySectorDelegate(int industry);
 
-        static GetIndustrySectorDelegate GetIndustrySector;
+        private static GetIndustrySectorDelegate GetIndustrySector;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl, SetLastError = true)]
         public delegate IntPtr AddStockDelegate(string ticker); // returns a pointer to StockInfo
 
-        static AddStockDelegate AddStock;
+        private static AddStockDelegate AddStock;
 
         #endregion
     } 

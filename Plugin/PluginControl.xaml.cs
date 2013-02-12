@@ -26,12 +26,15 @@ namespace AmiBroker.Plugin
     /// </summary>
     public partial class PluginControl : UserControl
     {
-        public PluginControl()
+        public PluginControl(DataSource dataSource)
         {
+            this.dataSource = dataSource;
             this.InitializeComponent();
         }
 
-        private void OnAboutClick(object sender, RoutedEventArgs e)
+        private readonly DataSource dataSource;
+
+        private void About_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
                 "This is a demo plug-in built with AmiBroker .NET SDK. For more info visit: http://github.com/kriasoft/amibroker",
