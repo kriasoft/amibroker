@@ -24,6 +24,12 @@ namespace AmiBroker.Plugin
     /// </summary>
     public partial class PluginControl : UserControl
     {
+        internal struct market
+        {
+            public int value;
+            public string title;
+        }
+
         public PluginControl(DataSource dataSource)
         {
             this.dataSource = dataSource;
@@ -72,10 +78,11 @@ namespace AmiBroker.Plugin
                     sb.AppendLine(codes[i] + "," + names[i] + "," + marketID.ToString("G"));
                 }
 
-                var fileName = Path.Combine(databasePath, "symbols.csv");
+                var fileName = Path.Combine(this.dataSource.DatabasePath, "symbols.csv");
+                var fileName2 = Path.Combine(this.dataSource.DatabasePath, "symbols.format");
 
                 using (var fs = File.Open(fileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
-                using (var sw = new StreamWriter(fs))
+                using (var sw = new StreamWriter(fs, Encoding.GetEncoding("windows-1251")))
                 {
                     fs.Position = 0;
                     sw.WriteLine("Ticker,FullName,MarketID");
@@ -89,6 +96,24 @@ namespace AmiBroker.Plugin
                     sw.Flush();
                     fs.SetLength(fs.Position - 2);
                 }
+
+                using (var fs = File.Open(fileName2, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                using (var sw = new StreamWriter(fs))
+                {
+                    fs.Position = 0;
+                    sw.WriteLine("$FORMAT Ticker, FullName, MarketID\n$SKIPLINES 1\n$SEPARATOR ,\n$CONT 1\n$GROUP 255\n$AUTOADD 1\n$DEBUG 1\n$NOQUOTES 1");
+                    sw.Flush();
+                    fs.SetLength(fs.Position);
+                }
+
+                this.dataSource.Broker.Import(0, fileName, fileName2);
+
+                for (var i = 0; i < marketsTemp.Length; i++)
+                {
+                    this.dataSource.Broker.Markets.Item(i).Name = marketsTemp[i].title;
+                }
+
+                this.dataSource.Broker.RefreshAll();
             }
         }
     }
