@@ -10,13 +10,15 @@ namespace AmiBroker.Plugin
     using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Drawing;
+    using System.Linq;
     using System.Net.Http;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Windows.Controls;
 
     using Models;
+
     using RGiesecke.DllExport;
-    using System.Windows.Controls;
 
     /// <summary>
     /// Standard implementation of a typical AmiBroker plug-ins.
@@ -95,24 +97,38 @@ namespace AmiBroker.Plugin
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static unsafe int GetQuotesEx(string ticker, Periodicity periodicity, int lastValid, int size, Quotation* quotes, GQEContext* context)
         {
-            // TODO: Add logic here. Take a look at the demo below:
-
             Debug.WriteLine("GetQuotesEx(ticker: " + ticker + ", periodicity: " + periodicity + ", lastValid: " + lastValid + ", size: " + size + ", ...)");
 
-            /*for (var i = 0; i < 5; i++)
-            {
-                quotes[i].DateTime = new AmiDate(DateTime.Now.AddDays(i - 5));
-                quotes[i].Price = 10;
-                quotes[i].Open = 15;
-                quotes[i].High = 16;
-                quotes[i].Low = 9;
-                quotes[i].Volume = 1000;
-                quotes[i].OpenInterest = 0;
-                quotes[i].AuxData1 = 0;
-                quotes[i].AuxData2 = 0;
-            }
+            var lastQuotes = lastValid > 1 ? new Quotation[] { quotes[lastValid - 1], quotes[lastValid] } : null;
+            var newQuotes = DataSource.GetQuotes(ticker, periodicity, size, lastQuotes: lastQuotes);
 
-            return 5;*/
+            if (newQuotes.Any())
+            {
+                // If the quotes[lastValid - 1] equals to the new quote with the same date and time stamp returned from the server, then we need to merge new quotes with old ones
+                if (lastValid > 1 && lastQuotes[0].DateTime == newQuotes[0].DateTime && lastQuotes[0].Open == newQuotes[0].Open && lastQuotes[0].High == newQuotes[0].High && lastQuotes[0].Low == newQuotes[0].Low && lastQuotes[0].Price == newQuotes[0].Price && lastQuotes[0].Volume == newQuotes[0].Volume)
+                {
+                    // TODO: Add merge logic here
+                }
+                else
+                {
+                    lastValid = 0;
+                    for (var i = 0; i < newQuotes.Length; i++)
+                    {
+                        quotes[i].DateTime = newQuotes[i].DateTime;
+                        quotes[i].Price = newQuotes[i].Price;
+                        quotes[i].Open = newQuotes[i].Open;
+                        quotes[i].High = newQuotes[i].High;
+                        quotes[i].Low = newQuotes[i].Low;
+                        quotes[i].Volume = newQuotes[i].Volume;
+                        quotes[i].OpenInterest = newQuotes[i].OpenInterest;
+                        quotes[i].AuxData1 = newQuotes[i].AuxData1;
+                        quotes[i].AuxData2 = newQuotes[i].AuxData2;
+                        lastValid++;
+                    }
+
+                    return lastValid;
+                }
+            }
 
             // return 'lastValid + 1' if no updates are found and you want to keep all existing records
             return lastValid + 1;

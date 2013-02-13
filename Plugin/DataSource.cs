@@ -8,6 +8,8 @@ namespace AmiBroker.Plugin
 {
     using System;
 
+    using AmiBroker.Plugin.Models;
+
     public class DataSource
     {
         public DataSource(string databasePath, IntPtr mainWnd)
@@ -28,5 +30,12 @@ namespace AmiBroker.Plugin
         /// Gets AmiBroker's OLE automation object.
         /// </summary>
         public dynamic Broker { get; private set; }
+
+        public Quotation[] GetQuotes(string ticker, Periodicity periodicity, int limit, Quotation[] lastQuotes = null)
+        {
+            // TODO: Return the list of quotes for the specified ticker.
+
+            return new Quotation[] { };
+        }
     }
 }
