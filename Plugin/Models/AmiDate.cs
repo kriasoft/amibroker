@@ -38,6 +38,51 @@ namespace AmiBroker.Plugin.Models
                               (ulong)microsecond << 6 | Convert.ToUInt64(isFuturePad);
         }
 
+        public int Year
+        {
+            get { return (int)(this.packedDate >> 52); }
+        }
+
+        public int Month
+        {
+            get { return (int)(this.packedDate >> 48) & 15; }
+        }
+
+        public int Day
+        {
+            get { return (int)(this.packedDate >> 43) & 31; }
+        }
+
+        public int Hour
+        {
+            get { return (int)(this.packedDate >> 38) & 31; }
+        }
+
+        public int Minute
+        {
+            get { return (int)(this.packedDate >> 32) & 63; }
+        }
+
+        public int Second
+        {
+            get { return (int)(this.packedDate >> 26) & 63; }
+        }
+
+        public int MilliSecond
+        {
+            get { return (int)(this.packedDate >> 16) & 1023; }
+        }
+
+        public int MicroSecond
+        {
+            get { return (int)(this.packedDate >> 6) & 1023; }
+        }
+
+        public bool IsFuturePad
+        {
+            get { return ((int)this.packedDate & 1) == 1; }
+        }
+
         public static explicit operator AmiDate(ulong date)
         {
             return new AmiDate(date);
@@ -55,7 +100,8 @@ namespace AmiBroker.Plugin.Models
 
         public override bool Equals(object obj)
         {
-            return this.packedDate == (uint)obj;
+            var date = obj as AmiDate;
+            return date != null && this.Year == date.Year && this.Month == date.Month && this.Day == date.Day && this.Hour == date.Hour && this.Minute == date.Minute && this.Second == date.Second && this.MilliSecond == date.MilliSecond && this.MicroSecond == date.MicroSecond;
         }
 
         public override int GetHashCode()
