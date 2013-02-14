@@ -4,6 +4,7 @@
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="Update symbol list" Click="UpdateSymbolList_Click" />
+            <MenuItem Header="Update Top 50 watchlist" Click="UpdateTop50_Click" />
         </ContextMenu>
     </UserControl.ContextMenu>
 </UserControl>
