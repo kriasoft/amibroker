@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PluginControl.xaml.cs" company="KriaSoft LLC">
+// <copyright file="RightClickMenu.xaml.cs" company="KriaSoft LLC">
 //   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -16,6 +16,7 @@ namespace AmiBroker.Plugin.Controls
     using System.Windows.Data;
     using System.Windows.Documents;
     using System.Windows.Input;
+    using System.Windows.Interop;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
@@ -26,13 +27,33 @@ namespace AmiBroker.Plugin.Controls
     /// </summary>
     public partial class RightClickMenu : UserControl
     {
+        private readonly DataSource dataSource;
+
         public RightClickMenu(DataSource dataSource)
         {
             this.dataSource = dataSource;
             this.InitializeComponent();
         }
 
-        private readonly DataSource dataSource;
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            var loginBox = new LoginBox(this.dataSource);
+
+            var window = new Window
+            {
+                Title = "Connect to the Data Source",
+                Content = loginBox,
+                ResizeMode = ResizeMode.NoResize,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+
+            window.ShowDialog();
+        }
+
+        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        {
+        }
 
         private void About_Click(object sender, RoutedEventArgs e)
         {

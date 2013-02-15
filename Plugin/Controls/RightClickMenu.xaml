@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <UserControl.ContextMenu>
         <ContextMenu>
+            <MenuItem Header="Connect" Click="Connect_Click" />
+            <MenuItem Header="Disconnect" Click="Disconnect_Click" IsEnabled="False" />
+            <Separator />
             <MenuItem Header="About this plug-in" Click="About_Click" />
         </ContextMenu>
     </UserControl.ContextMenu>
