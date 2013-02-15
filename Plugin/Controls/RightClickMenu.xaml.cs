@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace AmiBroker.Plugin
+namespace AmiBroker.Plugin.Controls
 {
     using System;
     using System.Collections.Generic;
@@ -22,9 +22,9 @@ namespace AmiBroker.Plugin
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for PluginControl user control.
+    /// Interaction logic for RightClickMenu user control.
     /// </summary>
-    public partial class PluginControl : UserControl
+    public partial class RightClickMenu : UserControl
     {
         private class EodData
         {
@@ -33,7 +33,7 @@ namespace AmiBroker.Plugin
 
         private readonly DataSource dataSource;
 
-        public PluginControl(DataSource dataSource)
+        public RightClickMenu(DataSource dataSource)
         {
             this.dataSource = dataSource;
             this.InitializeComponent();
