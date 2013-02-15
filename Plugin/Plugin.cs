@@ -16,6 +16,7 @@ namespace AmiBroker.Plugin
     using System.Text;
     using System.Windows.Controls;
 
+    using Controls;
     using Models;
 
     using RGiesecke.DllExport;
@@ -40,7 +41,7 @@ namespace AmiBroker.Plugin
         /// <summary>
         /// WPF user control which is used to display right-click context menu.
         /// </summary>
-        static PluginControl Control;
+        static RightClickMenu RightClickMenu;
 
         [DllExport(CallingConvention = CallingConvention.Cdecl)]
         public static void GetPluginInfo(ref PluginInfo pluginInfo)
@@ -74,13 +75,13 @@ namespace AmiBroker.Plugin
                     DataSource = new DataSource(
                         databasePath: Marshal.PtrToStringAnsi(notification->DatabasePath),
                         mainWnd: notification->MainWnd);
-                    Control = new PluginControl(DataSource);
+                    RightClickMenu = new RightClickMenu(DataSource);
                     break;
                 case PluginNotificationReason.DatabaseUnloaded:
                     DataSource.DatabasePath = null;
                     break;
                 case PluginNotificationReason.StatusRightClick:
-                    Control.ContextMenu.IsOpen = true;
+                    RightClickMenu.ContextMenu.IsOpen = true;
                     break;
                 case PluginNotificationReason.SettingsChange:
                     break;
