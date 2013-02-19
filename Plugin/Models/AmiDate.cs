@@ -34,8 +34,9 @@ namespace AmiBroker.Plugin.Models
                 // EOD markets
                 hour = 31;
                 minute = 63;
-                second = 0;
-                millisecond = 0;
+                second = 63;
+                millisecond = 1023;
+                microsecond = 1023;
             }
 
             this.packedDate = (ulong)year << 52 | (ulong)month << 48 | (ulong)day << 43 | (ulong)hour << 38 |
