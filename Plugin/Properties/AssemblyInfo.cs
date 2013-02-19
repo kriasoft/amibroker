@@ -11,11 +11,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AmiBroker data Plug-in")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Finam data Plug-in")]
+[assembly: AssemblyDescription("Finam data Plug-in for AmiBroker")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("KriaSoft LLC")]
-[assembly: AssemblyProduct("AmiBroker data Plug-in")]
+[assembly: AssemblyProduct("Finam data Plug-in")]
 [assembly: AssemblyCopyright("Copyright © 2013 KriaSoft LLC")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
