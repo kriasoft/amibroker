@@ -58,6 +58,16 @@ namespace AmiBroker.Plugin
             this.DatabasePath = databasePath;
             this.MainWnd = mainWnd;
             this.Broker = Activator.CreateInstance(Type.GetTypeFromProgID("Broker.Application", true));
+
+            if (this.Broker.ActiveDocument == null)
+            {
+                var processes = Process.GetProcesses().Where(x => x.ProcessName.Contains("AmiBroker")).ToArray();
+
+                foreach (var proc in processes)
+                {
+                    proc.Kill();
+                }
+            }
         }
 
         public string DatabasePath { get; set; }
@@ -152,7 +162,7 @@ namespace AmiBroker.Plugin
                     http.BaseAddress = new Uri(baseUrl);
 
                     using (var stream = await http.GetStreamAsync("/cache/icharts/icharts.js"))
-                    using (var reader = new System.IO.StreamReader(stream, System.Text.Encoding.GetEncoding("windows-1251")))
+                    using (var reader = new StreamReader(stream, System.Text.Encoding.GetEncoding("windows-1251")))
                     {
                         html = reader.ReadToEnd();
                     }
@@ -199,8 +209,8 @@ namespace AmiBroker.Plugin
 
                 if (periodicity == Periodicity.EndOfDay)
                 {
-                    var quotesFileName = System.IO.Path.Combine(this.DatabasePath, ticker + ".csv");
-                    var formatFileName = System.IO.Path.Combine(this.DatabasePath, "quotes.format");
+                    var importFileName = Path.Combine(this.DatabasePath, "ASCII\\" + ticker + ".txt");
+                    var formatFileName = Path.Combine(this.DatabasePath, "ASCII\\" + "finam.format");
 
                     var tz = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
                     var lastDate = lastQuotes == null ? null : new AmiDate(lastQuotes[0].DateTime);
@@ -222,9 +232,9 @@ namespace AmiBroker.Plugin
                         Debug.WriteLine(csv.Substring(0, 200));
                     }
 
-                    Debug.WriteLine("Saving quotes for " + ticker + " to " + quotesFileName);
+                    Debug.WriteLine("Saving quotes for " + ticker + " to " + importFileName);
 
-                    using (var fs = File.Open(quotesFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                    using (var fs = File.Open(importFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
                     using (var sw = new StreamWriter(fs))
                     {
                         fs.Position = 0;
@@ -244,9 +254,9 @@ namespace AmiBroker.Plugin
                         fs.SetLength(fs.Position);
                     }
 
-                    Debug.WriteLine("Importing quotes for " + ticker + " from " + quotesFileName);
+                    Debug.WriteLine("Importing quotes for " + ticker + " from " + importFileName);
 
-                    this.Broker.Import(0, quotesFileName, formatFileName);
+                    this.Broker.Import(0, importFileName, formatFileName);
                     this.Broker.RefreshAll();
                 }
             });
