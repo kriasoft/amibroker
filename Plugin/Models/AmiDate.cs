@@ -8,7 +8,7 @@ namespace AmiBroker.Plugin.Models
 {
     using System;
 
-    internal class AmiDate
+    internal class AmiDate : IComparable<AmiDate>
     {
         private ulong packedDate;
 
@@ -107,6 +107,12 @@ namespace AmiBroker.Plugin.Models
         public override int GetHashCode()
         {
             return this.packedDate.GetHashCode();
+        }
+
+        public int CompareTo(AmiDate other)
+        {
+            return new DateTime(this.Year, this.Month, this.Day, this.Hour, this.Minute, this.Second, this.MilliSecond)
+                .CompareTo(new DateTime(other.Year, other.Month, other.Day, other.Hour, other.Minute, other.Second, other.MilliSecond));
         }
     }
 }

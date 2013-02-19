@@ -14,6 +14,7 @@ namespace AmiBroker.Plugin
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using System.Windows;
     using System.Web.Script.Serialization;
 
     using Models;
@@ -61,12 +62,15 @@ namespace AmiBroker.Plugin
 
             if (this.Broker.ActiveDocument == null)
             {
-                var processes = Process.GetProcesses().Where(x => x.ProcessName.Contains("AmiBroker")).ToArray();
-
+                var processes = Process.GetProcesses().Where(x => x.ProcessName.Contains("AmiBroker") && x.MainWindowHandle != this.MainWnd);
+                
                 foreach (var proc in processes)
                 {
-                    proc.Kill();
+                    MessageBox.Show("Please close AmiBroker application with Process ID: " + proc.Id, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    proc.WaitForExit();
                 }
+
+                this.Broker = Activator.CreateInstance(Type.GetTypeFromProgID("Broker.Application", true));
             }
         }
 
@@ -180,7 +184,7 @@ namespace AmiBroker.Plugin
             return this.symbols;
         }
 
-        public Quotation[] GetQuotes(string ticker, Periodicity periodicity, int limit, Quotation[] lastQuotes = null)
+        public Quotation[] GetQuotes(string ticker, Periodicity periodicity, int limit, Quotation[] existingQuotes)
         {
             // Check if there is already a portion of quotes waiting to be returned to the caller
             if (this.cache.ContainsKey(ticker))
@@ -195,7 +199,6 @@ namespace AmiBroker.Plugin
                     return result;
                 }
             }
-
             // If not, fetch new quotes asynchroniously
             Task.Run(async () =>
             {
@@ -213,8 +216,8 @@ namespace AmiBroker.Plugin
                     var formatFileName = Path.Combine(this.DatabasePath, "ASCII\\" + "finam.format");
 
                     var tz = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
-                    var lastDate = lastQuotes == null ? null : new AmiDate(lastQuotes[0].DateTime);
-                    var startDate = lastQuotes == null ? DateTime.Today.AddDays(-((double)limit / 5 * 7 + 10)) : new DateTime(lastDate.Year, lastDate.Month, lastDate.Day);
+                    var lastDate = existingQuotes.Any() ? null : new AmiDate(existingQuotes[existingQuotes.Length - 1].DateTime);
+                    var startDate = lastDate == null ? DateTime.Today.AddDays(-((double)limit / 5 * 7 + 10)) : new DateTime(lastDate.Year, lastDate.Month, lastDate.Day);
                     var endDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, tz);
 
                     Debug.WriteLine("Downloading " + ticker + " quotes starting from " + startDate.ToShortDateString() + " to " + endDate.ToShortDateString());
