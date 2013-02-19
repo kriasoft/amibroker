@@ -19,7 +19,9 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 ### Community Plug-ins
 
  - [Yahoo Finance](http://finance.yahoo.com) real-time data plug-in for AmiBroker (planned)
- - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker (planned)
+ - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker (beta)
+
+   **Download at** [sourceforge.net/projects/amibroker/files/](https://sourceforge.net/projects/amibroker/files/)
 
 ### Demo
 
