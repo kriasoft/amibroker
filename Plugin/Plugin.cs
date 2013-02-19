@@ -122,10 +122,12 @@ namespace AmiBroker.Plugin
                     };
                 }
 
-                Array.Sort<Quotation>(existingQuotes, new Comparison<Quotation>((q1, q2) => q1.DateTime.CompareTo(q2.DateTime)));
+                //Array.Sort<Quotation>(existingQuotes, new Comparison<Quotation>((q1, q2) => q1.DateTime.CompareTo(q2.DateTime)));
             }
 
             var newQuotes = DataSource.GetQuotes(ticker, periodicity, size, existingQuotes);
+
+            Debug.WriteLine("DataSource.GetQuotes(" + ticker + ", ...) returned " + newQuotes.Length + " quotes");
 
             if (newQuotes.Any())
             {

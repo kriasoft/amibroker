@@ -9,13 +9,14 @@ namespace AmiBroker.Plugin
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using System.Windows;
     using System.Web.Script.Serialization;
+    using System.Windows;
 
     using Models;
 
@@ -190,6 +191,8 @@ namespace AmiBroker.Plugin
             if (this.cache.ContainsKey(ticker))
             {
                 var quotes = this.cache[ticker];
+
+                Debug.WriteLine("Found " + quotes.Item2.Length + " in the cache");
                 
                 // Check if quotes were fetched less than 5 minutes ago
                 if (quotes.Item1 > DateTime.Now.AddMinutes(-5))
@@ -199,6 +202,7 @@ namespace AmiBroker.Plugin
                     return result;
                 }
             }
+
             // If not, fetch new quotes asynchroniously
             Task.Run(async () =>
             {
@@ -216,51 +220,91 @@ namespace AmiBroker.Plugin
                     var formatFileName = Path.Combine(this.DatabasePath, "ASCII\\" + "finam.format");
 
                     var tz = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
-                    var lastDate = existingQuotes.Any() ? null : new AmiDate(existingQuotes[existingQuotes.Length - 1].DateTime);
+                    var lastDate = existingQuotes.Any() ? new AmiDate(existingQuotes[0].DateTime) : null;
                     var startDate = lastDate == null ? DateTime.Today.AddDays(-((double)limit / 5 * 7 + 10)) : new DateTime(lastDate.Year, lastDate.Month, lastDate.Day);
                     var endDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.Date, tz);
 
                     Debug.WriteLine("Downloading " + ticker + " quotes starting from " + startDate.ToShortDateString() + " to " + endDate.ToShortDateString());
 
                     string csv = null;
+                    var url = await this.GetExportQuotesEndpoint();
+                    var newQuotes = new List<Quotation>();
 
                     using (var http = new HttpClient())
                     {
-                        var url = await this.GetExportQuotesEndpoint();
                         Debug.WriteLine("Setting base url " + url);
                         http.BaseAddress = new Uri(url);
-                        url = string.Format("/{0}.csv?market={1}&em={2}&code={0}&df={3:dd}&mf={3:mm}&yf={3:yyyy}&dt={4:dd}&mt={4:mm}&yt={4:yyyy}&p=8&f={0}&e=.csv&cn={0}&dtf=1&tmf=1&MSOR=0&mstime=on&mstimever=1&sep=1&sep2=2&datf=1", ticker, symbol.MarketID, symbol.ID, startDate, endDate);
+                        url = string.Format("/{0}.csv?market={1}&em={2}&code={0}&df={3:g}&mf={4:g}&yf={5:g}&dt={6:g}&mt={7:g}&yt={8:g}&p=8&f={0}&e=.csv&cn={0}&dtf=1&tmf=1&MSOR=0&mstime=on&mstimever=1&sep=1&sep2=1&datf=5", ticker, symbol.MarketID, symbol.ID, startDate.Day, startDate.Month - 1, startDate.Year, endDate.Day, endDate.Month - 1, endDate.Year);
                         Debug.WriteLine(url);
-                        csv = await http.GetStringAsync(url);
-                        Debug.WriteLine(csv.Substring(0, 200));
+                        using (var stream = await http.GetStreamAsync(url))
+                        using (var reader = new StreamReader(stream))
+                        {
+                            while (reader.Peek() > 0)
+                            {
+                                var line = await reader.ReadLineAsync();
+                                //Debug.WriteLine(line);
+                                var data = line.Split(',');
+                                var yeah = int.Parse(data[0].Substring(0, 4), CultureInfo.InvariantCulture);
+                                var month = int.Parse(data[0].Substring(4, 2), CultureInfo.InvariantCulture);
+                                var day = int.Parse(data[0].Substring(6, 2), CultureInfo.InvariantCulture);
+                                newQuotes.Add(new Quotation
+                                {
+                                    DateTime = new AmiDate(yeah, month, day),
+                                    Open = float.Parse(data[2], CultureInfo.InvariantCulture),
+                                    High = float.Parse(data[3], CultureInfo.InvariantCulture),
+                                    Low = float.Parse(data[4], CultureInfo.InvariantCulture),
+                                    Price = float.Parse(data[5], CultureInfo.InvariantCulture),
+                                    Volume = float.Parse(data[6], CultureInfo.InvariantCulture),
+                                });
+                            }
+                        }
                     }
 
-                    Debug.WriteLine("Saving quotes for " + ticker + " to " + importFileName);
-
-                    using (var fs = File.Open(importFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
-                    using (var sw = new StreamWriter(fs))
+                    Debug.WriteLine("Downloaded " + newQuotes.Count + " new quotes for " + ticker);
+                    
+                    if (newQuotes.Any())
                     {
-                        fs.Position = 0;
-                        sw.Write(csv);
-                        sw.Flush();
-                        fs.SetLength(fs.Position);
+                        var fromDate = new AmiDate(newQuotes[0].DateTime);
+                        var toDate = new AmiDate(newQuotes[newQuotes.Count - 1].DateTime);
+                        Debug.WriteLine("From {0:dddd}-{1:dd}-{2:dd} till {3:dddd}-{4:dd}-{5:dd}", fromDate.Year, fromDate.Month, fromDate.Day, toDate.Year, toDate.Month, toDate.Year);
                     }
-
-                    Debug.WriteLine("Creating " + formatFileName);
-
-                    using (var fs = File.Open(formatFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
-                    using (var sw = new StreamWriter(fs))
+                    else
                     {
-                        fs.Position = 0;
-                        sw.WriteLine("$FORMAT Ticker,Skip,Date_YMD,Skip,Open,High,Low,Close,Volume\n$SKIPLINES 0\n$SEPARATOR ,\n$DEBUG 1\n$AUTOADD 1\n$CONT 1\n$GROUP 254\n$BREAKONERR 1");
-                        sw.Flush();
-                        fs.SetLength(fs.Position);
+                        Debug.WriteLine("No quotes were downloaded from finam.ru for " + ticker);
+                        return;
                     }
 
-                    Debug.WriteLine("Importing quotes for " + ticker + " from " + importFileName);
+                    if (newQuotes.Count == 1 && existingQuotes.Any())
+                    {
+                        var lastQuote = existingQuotes[0];
+                        var lastQuoteDate = new AmiDate(lastQuote.DateTime);
+                        var newQuote = newQuotes[0];
+                        var newQuoteDate = new AmiDate(newQuote.DateTime);
 
-                    this.Broker.Import(0, importFileName, formatFileName);
-                    this.Broker.RefreshAll();
+                        if (lastQuoteDate.Equals(newQuoteDate) && lastQuote.Open == newQuote.Open && lastQuote.High == newQuote.High && lastQuote.Low == newQuote.Low && lastQuote.Price == newQuote.Price)
+                        {
+                            Debug.WriteLine("No new quotes found for " + ticker);
+                            return;
+                        }
+                    }
+
+                    //newQuotes.Reverse();
+                    //newQuotes.AddRange(existingQuotes);
+                    var count = newQuotes.Count - 1;
+
+                    for (var i = 0; i < count; i++)
+                    {
+                        if (new AmiDate(newQuotes[i].DateTime).Equals(new AmiDate(newQuotes[i + 1].DateTime)))
+                        {
+                            newQuotes.RemoveAt(i + 1);
+                            i--;
+                            count--;
+                        }
+                    }
+
+                    Debug.WriteLine("Adding " + newQuotes.Count + " quotes for " + ticker + " to the cache");
+                    this.cache.Add(ticker, new Tuple<DateTime,Quotation[]>(DateTime.Now, newQuotes.Take(limit).ToArray()));
+                    NativeMethods.SendMessage(this.MainWnd, 0x0400 + 13000, IntPtr.Zero, IntPtr.Zero);
                 }
             });
 
