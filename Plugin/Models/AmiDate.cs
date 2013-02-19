@@ -22,6 +22,11 @@ namespace AmiBroker.Plugin.Models
         {
         }
 
+        public AmiDate(int year, int month, int day, bool isFuturePad = false)
+            : this(year, month, day, 0, 0, 0, 0, 0, isEOD: true, isFuturePad: isFuturePad)
+        {
+        }
+
         public AmiDate(int year, int month, int day, int hour, int minute, int second, int millisecond, int microsecond, bool isEOD = false, bool isFuturePad = false)
         {
             if (isEOD)
