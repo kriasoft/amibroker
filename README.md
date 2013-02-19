@@ -25,7 +25,7 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 
 ### Demo
 
-![AmiBroker .NET SDK](http://amibroker.googlecode.com/files/Amibroker.Plugin.Screenshot.png?1)
+![AmiBroker .NET SDK](http://i.imgur.com/PFYUlLw.png)
 
 ### Getting Started
 
