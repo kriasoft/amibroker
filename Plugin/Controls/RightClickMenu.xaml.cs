@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PluginControl.xaml.cs" company="KriaSoft LLC">
+// <copyright file="RightClickMenu.xaml.cs" company="KriaSoft LLC">
 //   Copyright © 2013 Konstantin Tarkus, KriaSoft LLC. See LICENSE.txt
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,7 +7,6 @@
 namespace AmiBroker.Plugin.Controls
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -15,8 +14,6 @@ namespace AmiBroker.Plugin.Controls
     using System.Net.Http;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-    using System.Web;
     using System.Web.Script.Serialization;
     using System.Windows;
     using System.Windows.Controls;
@@ -26,17 +23,32 @@ namespace AmiBroker.Plugin.Controls
     /// </summary>
     public partial class RightClickMenu : UserControl
     {
-        private class EodData
-        {
-            public string[][] rows;
-        }
-
         private readonly DataSource dataSource;
 
         public RightClickMenu(DataSource dataSource)
         {
             this.dataSource = dataSource;
             this.InitializeComponent();
+        }
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            var loginBox = new LoginBox(this.dataSource);
+
+            var window = new Window
+            {
+                Title = "Connect to the Data Source",
+                Content = loginBox,
+                ResizeMode = ResizeMode.NoResize,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+
+            window.ShowDialog();
+        }
+
+        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        {
         }
 
         private async void UpdateSymbolList_Click(object sender, RoutedEventArgs e)
@@ -96,7 +108,7 @@ namespace AmiBroker.Plugin.Controls
             }
 
             this.dataSource.Broker.RefreshAll();
-    }
+        }
 
         private async void UpdateTop50_Click(object sender, RoutedEventArgs e)
         {
@@ -147,6 +159,11 @@ namespace AmiBroker.Plugin.Controls
                 this.dataSource.Broker.Import(0, stocksFileName, formatFileName);
                 this.dataSource.Broker.RefreshAll();
             }
+        }
+
+        private class EodData
+        {
+            public string[][] rows;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace AmiBroker.Plugin
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
@@ -223,8 +224,8 @@ namespace AmiBroker.Plugin
 
                     Debug.WriteLine("Saving quotes for " + ticker + " to " + quotesFileName);
 
-                    using (var fs = System.IO.File.Open(quotesFileName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None))
-                    using (var sw = new System.IO.StreamWriter(fs))
+                    using (var fs = File.Open(quotesFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                    using (var sw = new StreamWriter(fs))
                     {
                         fs.Position = 0;
                         sw.Write(csv);
@@ -234,8 +235,8 @@ namespace AmiBroker.Plugin
 
                     Debug.WriteLine("Creating " + formatFileName);
 
-                    using (var fs = System.IO.File.Open(formatFileName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None))
-                    using (var sw = new System.IO.StreamWriter(fs))
+                    using (var fs = File.Open(formatFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+                    using (var sw = new StreamWriter(fs))
                     {
                         fs.Position = 0;
                         sw.WriteLine("$FORMAT Ticker,Skip,Date_YMD,Skip,Open,High,Low,Close,Volume\n$SKIPLINES 0\n$SEPARATOR ,\n$DEBUG 1\n$AUTOADD 1\n$CONT 1\n$GROUP 254\n$BREAKONERR 1");

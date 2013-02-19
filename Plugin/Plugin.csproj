@@ -57,6 +57,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\LoginBox.xaml.cs">
+      <DependentUpon>LoginBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RightClickMenu.xaml.cs">
       <DependentUpon>RightClickMenu.xaml</DependentUpon>
     </Compile>
@@ -83,6 +86,10 @@
     <None Include="Packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\LoginBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\RightClickMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
