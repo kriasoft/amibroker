@@ -12,11 +12,10 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 ### Prerequisites for Developers
 
  - [Visual Studio 2012](http://www.visualstudio.com) (preferred) or Visual Studio 2010
- - [NuGet Package Manager](http://www.nuget.org) Visual Studio extension
- - [StyleCop](http://stylecop.codeplex.com/) (optional) for code style checking
- - Microsoft .NET Framework 4.5
+ - [NuGet Package Manager](http://www.nuget.org) a free Visual Studio extension
+ - Microsoft .NET Framework 4.5 (can be easily downgraded by you if needed in project settings)
 
-### Community Plug-ins
+### Community Plug-ins for AmiBroker
 
  - [Yahoo Finance](http://finance.yahoo.com) real-time data plug-in for AmiBroker (planned)
  - [Finam](http://www.finam.ru) real-time data plug-in for AmiBroker (beta)
@@ -35,10 +34,11 @@ in order to download the latest version of this project to your local folder.
 
 Open 'AmiBroker .NET SDK.sln' solution file in Visual Studio, update information about your plug-in inside
 `Plugin/Plugin.cs/GetPluginInfo()` method, add quotes related logic inside `Plugin/Plugin.cs/GetQuotesEx()` method,
-build the project, copy "Plugin.dll" to the AmiBroker's Plugins folder or alternatively you can add a
-[symbolic link](http://en.wikipedia.org/wiki/NTFS_symbolic_link) with the following command:
+build the project and you're done. Your first data plug-in is ready to be tested and debugged.
 
-    mklink "C:\Program Files (x86)\AmiBroker\Plugins\Plugin.dll" "C:\Projects\AmiBroker .NET SDK\Plugin\bin\Debug\Plugin.dll"
+Note, that this project is just a port of the oficial C++ based ADK. In order to understand how it works it is
+strongly recommended to read the official ADK manual which can be found inside
+[ADK.zip](http://www.amibroker.com/bin/ADK.zip) file.
 
 ### Support & Feedback
 
