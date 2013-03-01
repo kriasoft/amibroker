@@ -24,7 +24,7 @@ namespace AmiBroker.Plugin.Models
 
         public ulong SessionStart; /* Bit encoding HHHHH.MMMMMM.0000   hours << 10 | ( minutes << 4 ) */
 
-        public ulong SessionEnd;
+        public ulong SessionEnd; /* Bit encoding HHHHH.MMMMMM.0000   hours << 10 | ( minutes << 4 ) */
 
         public int FilterWeekends;
 

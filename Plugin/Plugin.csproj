@@ -69,7 +69,11 @@
     <Compile Include="Models\AmiVar.cs" />
     <Compile Include="Models\ColorRef.cs" />
     <Compile Include="Models\GQEContext.cs" />
+    <Compile Include="Models\InfoSite.cs" />
     <Compile Include="Models\IntradaySettings.cs" />
+    <Compile Include="Models\Keyboard.cs" />
+    <Compile Include="Models\OptimizeItem.cs" />
+    <Compile Include="Models\OptimizeParams.cs" />
     <Compile Include="Models\Periodicity.cs" />
     <Compile Include="Models\PluginID.cs" />
     <Compile Include="Models\PluginInfo.cs" />
@@ -77,6 +81,8 @@
     <Compile Include="Models\PluginStatus.cs" />
     <Compile Include="Models\PluginType.cs" />
     <Compile Include="Models\Quotation.cs" />
+    <Compile Include="Models\RecentInfo.cs" />
+    <Compile Include="Models\SiteInterface.cs" />
     <Compile Include="Models\StockInfo.cs" />
     <Compile Include="Models\Workspace.cs" />
     <Compile Include="NativeMethods.cs" />
