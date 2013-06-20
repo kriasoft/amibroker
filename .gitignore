@@ -64,7 +64,8 @@ local.properties
 *.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
-packages/
+[Pp]ackages/
+![Pp]ackages/UnmanagedExports.1.2.4.23262/tools/RGiesecke.DllExport.targets
 
 # Visual C++ cache files
 ipch/

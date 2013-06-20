@@ -38,7 +38,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RGiesecke.DllExport.Metadata">
-      <HintPath>..\packages\UnmanagedExports.1.2.2.23707\lib\net\RGiesecke.DllExport.Metadata.dll</HintPath>
+      <HintPath>..\packages\UnmanagedExports.1.2.4.23262\lib\net\RGiesecke.DllExport.Metadata.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -99,10 +99,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="../packages/UnmanagedExports.1.2.2.23707/tools/RGiesecke.DllExport.targets" />
+  <Import Project="../packages/UnmanagedExports.1.2.4.23262/tools/RGiesecke.DllExport.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "C:\Program Files (x86)\AmiBroker\Plugins"</PostBuildEvent>
   </PropertyGroup>
