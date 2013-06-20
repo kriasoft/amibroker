@@ -1,8 +1,7 @@
-# AmiBroker .NET SDK and Community Plug-ins
+## AmiBroker .NET SDK and Community Plug-ins
 
-This is yet another [AmiBroker](http://www.amibroker.com) plug-in SDK for .NET developers. As opposed to the official
-C++ based [AmiBroker Development Kit](http://www.amibroker.com/download.html) (ADK) it can be used for data and/or
-optimization plug-in authoring with .NET 4.5 / C#.
+Non-official [AmiBroker](http://www.amibroker.com) plug-in SDK for .NET developers. It's just a port of the
+official C++ based [AmiBroker Development Kit](http://www.amibroker.com/download.html) (ADK) to .NET / C#.
 
 It is 100% free, no hidden charges, allowed for both personal and commercial use under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
@@ -12,8 +11,8 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 ### Prerequisites for Developers
 
  - [Visual Studio 2012](http://www.visualstudio.com) (preferred) or Visual Studio 2010
- - [NuGet Package Manager](http://www.nuget.org) a free Visual Studio extension
- - Microsoft .NET Framework 4.5 (can be easily downgraded by you if needed in project settings)
+ - [NuGet](http://www.nuget.org) Package Manager extension for Visual Studio
+ - Microsoft .NET Framework 4.5 (can be easily downgraded if needed in Plugin.csproj file)
 
 ### Community Plug-ins for AmiBroker
 
@@ -29,7 +28,7 @@ this repo and send [pull requests](https://help.github.com/articles/using-pull-r
 ### Getting Started
 
 Download and install [GitHub for Windows](http://windows.github.com/) if you havn't done it already. Click
-[[Clone in Windows](github-windows://openRepo/https://github.com/kriasoft/amibroker)] button at the top of this page
+[[Clone in Desktop](github-windows://openRepo/https://github.com/kriasoft/amibroker)] button on the right at this page
 in order to download the latest version of this project to your local folder.
 
 Open 'AmiBroker .NET SDK.sln' solution file in Visual Studio, update information about your plug-in inside
@@ -43,4 +42,4 @@ strongly recommended to read the official ADK manual which can be found inside
 ### Support & Feedback
 
 Visit our [discussions board](https://groups.google.com/forum/?fromgroups=#!forum/amidev), feel free to ask questions
-and leave feature requests.
+and send feature requests.
